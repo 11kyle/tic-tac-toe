@@ -2,7 +2,31 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+@layer base {
+  body {
+    @apply bg-dark-navy
+  }
+}
+
+@layer components {
+  .heading-lg {
+    @apply text-[40px] font-bold leading-normal tracking-[2.5px] uppercase;
+  }
+  .heading-md {
+    @apply text-[24px] font-bold leading-normal tracking-[1.5px] uppercase;
+  }
+  .heading-sm {
+    @apply text-[20px] font-bold leading-normal tracking-[1.25px] uppercase;
+  }
+  .heading-xs {
+    @apply text-[16px] font-bold leading-normal tracking-[1px] uppercase;
+  }
+  .body {
+    @apply text-[14px] font-medium leading-normal tracking-[0.875px]
+  }
+}
+
+/* :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
@@ -24,4 +48,4 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
-}
+} */
