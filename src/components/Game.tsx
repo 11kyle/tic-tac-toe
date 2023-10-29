@@ -187,8 +187,8 @@ export function Game({ setIsPlaying }: GameProps) {
               {square.isMarked ? (
                 <div className="-mt-2">
                   {square.value === "x" 
-                    ? <IconX className="w-12 md:w-16 h-12 md:h-16" />
-                    : <IconO className="w-12 md:w-16 h-12 md:h-16" />
+                    ? <IconX className="w-12 md:w-16 h-12 md:h-16 fill-light-blue" />
+                    : <IconO className="w-12 md:w-16 h-12 md:h-16 fill-light-yellow" />
                   }
                 </div>
               ) : (

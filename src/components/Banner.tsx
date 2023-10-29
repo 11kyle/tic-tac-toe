@@ -94,4 +94,3 @@ export default function Banner({ open, setOpen, winner, handleQuit, handleReset 
     </Transition.Root>
   )
 }
-
