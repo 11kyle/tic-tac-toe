@@ -50,10 +50,10 @@ export default function Banner({ open, setOpen, winner, handleQuit, handleReset 
                         <div className="flex items-center justify-center gap-2 md:gap-6 mt-4 mb-6">
                           {winner === "x"
                             ? (
-                              <IconX className="w-[30px] md:w-16 h-[30px] md:h-16" />
+                              <IconX className="w-[30px] md:w-16 h-[30px] md:h-16 fill-light-blue" />
                             )
                             : (
-                              <IconO className="w-[30px] md:w-16 h-[30px] md:h-16" />
+                              <IconO className="w-[30px] md:w-16 h-[30px] md:h-16 fill-light-yellow" />
                             )
                           }
                           <span 
