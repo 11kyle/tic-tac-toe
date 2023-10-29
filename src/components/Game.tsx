@@ -9,6 +9,7 @@ import { IconOOutline } from "./icons/icon-o-outline";
 import { IconO } from "./icons/icon-o";
 import { IconX } from "./icons/icon-x";
 import Banner from "./Banner";
+import clsx from "clsx";
 
 type GameProps = {
   setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,6 +20,7 @@ type Square = {
   id: number
   isMarked: boolean
   value: null | "x" | "o"
+  isPartOfWin: boolean
 }
 
 let initialState = [
@@ -26,46 +28,55 @@ let initialState = [
     id: 0,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 1,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 2,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 3,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 4,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 5,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 6,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 7,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
   {
     id: 8,
     isMarked: false,
     value: null,
+    isPartOfWin: false,
   },
 ]
 
@@ -85,8 +96,8 @@ const winConditions = [
 export function Game({ setIsPlaying }: GameProps) {
   const [squares, setSquares] = useState<Square[]>(initialState)
   const [playerTurn, setPlayerTurn] = useState<"x" | "o">("x")
-  const [player1, setPlayer1] = useState<"x" | "o">("x")
   const [winner, setWinner] = useState<"x" | "o" | null>(null)
+  const [winningLine, setWinningLine] = useState<number[] | null>(null)
   const [open, setOpen] = useState<boolean>(false)
 
   const handleTurn = (activeSquare: Square) => {
@@ -117,6 +128,8 @@ export function Game({ setIsPlaying }: GameProps) {
     setWinner(null)
   }
 
+  // Loop through the winConditions array
+  // Loop through the line and check for a win
   const checkForWin = () => {
     for (let i = 0; i < winConditions.length; i++) {
       // console.log(winConditions[i])
@@ -126,16 +139,36 @@ export function Game({ setIsPlaying }: GameProps) {
       const winningPlayer = squares[winConditions[i][0]].value
 
       const isWinner = winConditions[i].every(currentValue => 
-        squares[currentValue].value && 
+        squares[currentValue].value && // value cannot be null
         squares[currentValue].value === squares[winConditions[i][0]].value)
       
       if (isWinner) {
-        setWinner(winningPlayer)
+        // setWinner(winningPlayer)
 
+        // TODO: Update squares' isPartOfWin to true if part of win
+        if (!winner) { // prevent useEffect from triggering
+          let newSquares: Square[] = [...squares]
+
+          for (let j = 0; j < winConditions[i].length; j++) {
+            newSquares = [...newSquares].map(square => {
+              if (square.id === winConditions[i][j]) {
+                return {...square, isPartOfWin: true}
+              } else {
+                return square
+              }
+            })
+
+            // setSquares(newSquares)
+          }
+          setSquares(newSquares)
+        }
+
+        setWinner(winningPlayer)
         setOpen(true) // show game finished banner
-        // console.log(winningPlayer, "Wins!")
         break // game is finished
       }
+
+      // check for tie game
       if (squares.every(square => square.value)) {
         setOpen(true)
         break
@@ -181,14 +214,29 @@ export function Game({ setIsPlaying }: GameProps) {
           {[...squares].map(square => (
             <div 
               key={square.id} 
-              className="group w-24 h-24 md:w-[140px] md:h-[140px] grid place-content-center rounded-[15px] bg-semi-dark-navy shadow-[inset_0px_-8px_0px_0px_rgba(16,33,42,1.0)]"
+              className={clsx(
+                square.isPartOfWin && winner === "x" && "bg-light-blue shadow-[inset_0px_-8px_0px_0px_rgba(17,140,135,1.0)]",
+                square.isPartOfWin && winner === "o" && "bg-light-yellow shadow-[inset_0px_-8px_0px_0px_rgba(204,139,19,1.0)]",
+                !square.isPartOfWin && "bg-semi-dark-navy shadow-[inset_0px_-8px_0px_0px_rgba(16,33,42,1.0)]",
+                "group w-24 h-24 md:w-[140px] md:h-[140px] grid place-content-center rounded-[15px]"
+              )}
               onClick={() => handleTurn(square)}
             >
               {square.isMarked ? (
                 <div className="-mt-2">
                   {square.value === "x" 
-                    ? <IconX className="w-12 md:w-16 h-12 md:h-16 fill-light-blue" />
-                    : <IconO className="w-12 md:w-16 h-12 md:h-16 fill-light-yellow" />
+                    ? <IconX 
+                        className={clsx(
+                          winner === "x" ? "fill-semi-dark-navy" : "",
+                          "w-12 md:w-16 h-12 md:h-16 fill-light-blue"
+                      )} 
+                    />
+                    : <IconO 
+                        className={clsx(
+                          winner === "o" ? "fill-semi-dark-navy" : "",
+                          "w-12 md:w-16 h-12 md:h-16 fill-light-yellow"
+                        )} 
+                      />
                   }
                 </div>
               ) : (
