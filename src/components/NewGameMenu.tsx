@@ -20,8 +20,8 @@ export function NewGameMenu({ setIsPlaying, player1 }: GameMenuProps) {
         <span className="block text-center text-silver body text-opacity-50">REMEMBER : X GOES FIRST</span>
       </div>
       <div className="space-y-5">
-        <Button>New Game (vs CPU)</Button>
-        <Button color="blue" onClick={() => setIsPlaying(true)}>New Game (vs Player)</Button>
+        <Button data-test="new-game-cpu-btn">New Game (vs CPU)</Button>
+        <Button data-test="new-game-p2p-btn" color="blue" onClick={() => setIsPlaying(true)}>New Game (vs Player)</Button>
       </div>
     </div>
   )

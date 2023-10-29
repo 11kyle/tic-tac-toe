@@ -22,7 +22,7 @@ export default function PlayerToggle() {
     // <div className="w-full p-2">
       <div className="w-full rounded-[10px] bg-dark-navy p-2 mt-6 mb-[17px]">
       {/* <div className="mx-auto w-full max-w-md"> */}
-        <RadioGroup value={selected} onChange={setSelected}>
+        <RadioGroup value={selected} onChange={setSelected} data-test="player-selection">
           <RadioGroup.Label className="sr-only">Player Selection</RadioGroup.Label>
           <div className="flex justify-center items-center">
             {players.map((player) => (

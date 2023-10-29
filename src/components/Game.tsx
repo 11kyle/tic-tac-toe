@@ -97,7 +97,6 @@ export function Game({ setIsPlaying }: GameProps) {
   const [squares, setSquares] = useState<Square[]>(initialState)
   const [playerTurn, setPlayerTurn] = useState<"x" | "o">("x")
   const [winner, setWinner] = useState<"x" | "o" | null>(null)
-  const [winningLine, setWinningLine] = useState<number[] | null>(null)
   const [open, setOpen] = useState<boolean>(false)
 
   const handleTurn = (activeSquare: Square) => {
