@@ -107,18 +107,20 @@ export function Game({ setIsPlaying }: GameProps) {
   const [open, setOpen] = useState<boolean>(false)
 
   const handleTurn = (activeSquare: Square) => {
-    if (!activeSquare.isMarked) {
-      const newSquares = [...squares].map(square => {
-        if (activeSquare.id === square.id) {
-          return {...square, isMarked: true, value: playerTurn}
-        } else {
-          return square
-        }
-      })
-
-      setSquares(newSquares)
-      setPlayerTurn(playerTurn === "x" ? "o" : "x")
+    if (activeSquare.isMarked) { // do nothing is square is already marked
+      return
     }
+
+    const newSquares = [...squares].map(square => {
+      if (activeSquare.id === square.id) {
+        return {...square, isMarked: true, value: playerTurn}
+      } else {
+        return square
+      }
+    })
+
+    setSquares(newSquares)
+    setPlayerTurn(playerTurn === "x" ? "o" : "x")
   }
 
   const handleReset = () => {
@@ -134,71 +136,76 @@ export function Game({ setIsPlaying }: GameProps) {
     // setWinner(null)
   }
 
+  // FIXED: BUG: last square is marked and results in a win but game scores it as a tie
+  // FIXED: BUG: player wins on last turn in center square results in tie
+  // UPDATED: reason for issue was checking if all squares had a value and there wasn't a winner
+  //          first time through for loop made this true if win didn't happen on first line
+  //          updated if statement to check if for loop was on last cycle
+  // FIXED: BUG: winning symbols changes color on non-winning squares
+  // UPDATED: added css ternary operations
   // Loop through the winConditions array
   // Loop through the line and check for a win
   const checkForWin = () => {
+    if(winner) { // don't do anything if there's already a winner - prevent useEffect from running again
+      return
+    }
+
     for (let i = 0; i < winConditions.length; i++) {
-      // console.log(winConditions[i])
-      // console.log(
-      //   winConditions[i].every(currentValue => squares[currentValue].value && squares[currentValue].value === squares[winConditions[i][0]].value)
-      // )
-      const winningPlayer = squares[winConditions[i][0]].value
+      const winningPlayer = squares[winConditions[i][0]].value // x or o
 
-      const isWinner = winConditions[i].every(currentValue => 
-        squares[currentValue].value && // value cannot be null
+      const isWinner = winConditions[i].every(currentValue => squares[currentValue].value && // value cannot be null
         squares[currentValue].value === squares[winConditions[i][0]].value)
-      
+
       if (isWinner) {
-        if (!winner) { // prevent useEffect from triggering
-          let newSquares: Square[] = [...squares]
+        let newSquares: Square[] = [...squares]
 
-          for (let j = 0; j < winConditions[i].length; j++) {
-            newSquares = [...newSquares].map(square => {
-              if (square.id === winConditions[i][j]) {
-                return {...square, isPartOfWin: true}
-              } else {
-                return square
-              }
+        for (let j = 0; j < winConditions[i].length; j++) {
+          newSquares = [...newSquares].map(square => {
+            if (square.id === winConditions[i][j]) {
+              return {...square, isPartOfWin: true}
+            } else {
+              return square
+            }
+          })
+        }
+
+        setSquares(newSquares)
+
+        // update score
+        switch (winningPlayer) {
+          case "x":
+            setScore({...score, 
+              x: score.x + 1
             })
-
-            // setSquares(newSquares)
-          }
-          setSquares(newSquares)
-
-          // update score
-          switch (winningPlayer) {
-            case "x":
-              setScore({...score, 
-                x: score.x + 1
-              })
-              break;
-            case "o":
-              setScore({...score, 
-                o: score.o + 1
-              })
-              break;
-            default:
-              console.log("error, something went wrong with updating the score on x or o win")
-              break;
-          }
+            break;
+          case "o":
+            setScore({...score, 
+              o: score.o + 1
+            })
+            break;
+          default:
+            console.log("error, something went wrong with updating the score on x or o win")
+            break;
         }
 
         setWinner(winningPlayer)
-        setOpen(true) // show game finished banner
+        setOpen(true)
         break // game is finished
       }
 
       // check for tie game
-      if (squares.every(square => square.value)) {
+      if (squares.every(square => square.value) && i === winConditions.length - 1) {
         setOpen(true)
+        // update score in tie
         setScore({...score,
           tie: score.tie + 1
         })
-        break
+        break // game is finished
       }
     }
   }
 
+  // check for a win every time a square is marked
   useEffect(() => {
     checkForWin()
   }, [squares])
@@ -226,7 +233,7 @@ export function Game({ setIsPlaying }: GameProps) {
             className="w-10 md:w-[52px] h-10 md:h-[52px] place-self-end grid place-content-center"
             onClick={() => handleReset()}
           >
-            <IconRestart className="w-4 h-4 md:w-5 md:h-5 -mt-2" />
+            <IconRestart className="w-4 h-4 md:w-5 md:h-5 -mt-1 md:-mt-2" />
           </Button>
         </div>
         <div className="grid grid-cols-3 gap-5">
@@ -246,13 +253,13 @@ export function Game({ setIsPlaying }: GameProps) {
                   {square.value === "x" 
                     ? <IconX 
                         className={clsx(
-                          winner === "x" ? "fill-semi-dark-navy" : "",
+                          winner === "x" && square.isPartOfWin ? "fill-semi-dark-navy" : "",
                           "w-12 md:w-16 h-12 md:h-16 fill-light-blue"
                       )} 
                     />
                     : <IconO 
                         className={clsx(
-                          winner === "o" ? "fill-semi-dark-navy" : "",
+                          winner === "o" && square.isPartOfWin ? "fill-semi-dark-navy" : "",
                           "w-12 md:w-16 h-12 md:h-16 fill-light-yellow"
                         )} 
                       />
