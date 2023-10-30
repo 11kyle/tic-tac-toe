@@ -99,7 +99,7 @@ const winConditions = [
   [2,4,6],
 ]
 
-export function Game({ setIsPlaying }: GameProps) {
+export function Game({ setIsPlaying, player1 }: GameProps) {
   const [squares, setSquares] = useState<Square[]>(initialState)
   const [playerTurn, setPlayerTurn] = useState<"x" | "o">("x")
   const [winner, setWinner] = useState<"x" | "o" | null>(null)
@@ -298,6 +298,7 @@ export function Game({ setIsPlaying }: GameProps) {
         winner={winner}
         handleQuit={handleQuit}
         handleReset={handleReset}
+        player1={player1}
       />
     </>
   )

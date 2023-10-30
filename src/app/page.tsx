@@ -17,7 +17,7 @@ export default function Home() {
           />
         : <NewGameMenu 
             setIsPlaying={setIsPlaying}
-            player1={player1}
+            setPlayer1={setPlayer1}
           />
       }
     </main>

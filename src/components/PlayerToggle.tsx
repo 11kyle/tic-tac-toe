@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { RadioGroup } from '@headlessui/react'
 import { IconX } from './icons/icon-x'
 import { IconO } from './icons/icon-o'
@@ -7,16 +7,28 @@ import clsx from 'clsx'
 const players = [
   {
     id: 0,
+    value: "x",
     icon: IconX
   },
   {
     id: 1,
+    value: "o",
     icon: IconO
   },
 ]
 
-export default function PlayerToggle() {
+type PlayerToggleProps = {
+  setPlayer1: React.Dispatch<React.SetStateAction<"x" | "o">>
+}
+
+export default function PlayerToggle({ setPlayer1 }: PlayerToggleProps) {
   const [selected, setSelected] = useState(players[0])
+
+  useEffect(() => {
+    if (selected.value === "x" || selected.value === "o") {
+      setPlayer1(selected.value)
+    }
+  }, [selected])
 
   return (
     // <div className="w-full p-2">

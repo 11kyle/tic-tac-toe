@@ -13,8 +13,9 @@ type BannerProps = {
   winner: "x" | "o" | null
   handleQuit: () => void
   handleReset: () => void
+  player1: "x" | "o"
 }
-export default function Banner({ open, setOpen, winner, handleQuit, handleReset }: BannerProps) {
+export default function Banner({ open, setOpen, winner, handleQuit, handleReset, player1 }: BannerProps) {
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={() => {}}>
@@ -46,7 +47,8 @@ export default function Banner({ open, setOpen, winner, handleQuit, handleReset 
                   {winner 
                     ? (
                       <>
-                        <h2 className="body md:header-xs font-bold uppercase text-silver">Oh no, you lost...</h2>
+                        {/* <h2 className="body md:header-xs font-bold uppercase text-silver">Oh no, you lost...</h2> */}
+                        <h2 className="body md:header-xs font-bold uppercase text-silver">{player1 === winner ? "Player 1 Wins!" : "Player 2 Wins!"}</h2>
                         <div className="flex items-center justify-center gap-2 md:gap-6 mt-4 mb-6">
                           {winner === "x"
                             ? (
