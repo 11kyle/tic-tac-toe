@@ -17,7 +17,7 @@ type BannerProps = {
 export default function Banner({ open, setOpen, winner, handleQuit, handleReset }: BannerProps) {
   return (
     <Transition.Root show={open} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setOpen}>
+      <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -82,7 +82,8 @@ export default function Banner({ open, setOpen, winner, handleQuit, handleReset 
                     >Quit</Button>
                     <Button 
                       variant="secondary"
-                        onClick={handleReset}
+                      className="!shadow-[inset_0px_-4px_0px_0px_rgba(204,139,19,1.0)]"
+                      onClick={handleReset}
                     >Next Round</Button>
                   </div>
                 </div>

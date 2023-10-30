@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "./Button";
-import { IconRestart } from "./icons/iconRestart";
+import { IconRestart } from "./icons/icon-restart";
 import { Logo } from "./icons/logo";
 import { IconXOutline } from "./icons/icon-x-outline";
 import { IconOOutline } from "./icons/icon-o-outline";
@@ -80,6 +80,12 @@ let initialState = [
   },
 ]
 
+const initialScore = {
+  x: 0,
+  o: 0,
+  tie: 0,
+}
+
 const winConditions = [
   [0,1,2],
   [3,4,5],
@@ -97,6 +103,7 @@ export function Game({ setIsPlaying }: GameProps) {
   const [squares, setSquares] = useState<Square[]>(initialState)
   const [playerTurn, setPlayerTurn] = useState<"x" | "o">("x")
   const [winner, setWinner] = useState<"x" | "o" | null>(null)
+  const [score, setScore] = useState(initialScore)
   const [open, setOpen] = useState<boolean>(false)
 
   const handleTurn = (activeSquare: Square) => {
@@ -110,8 +117,8 @@ export function Game({ setIsPlaying }: GameProps) {
       })
 
       setSquares(newSquares)
+      setPlayerTurn(playerTurn === "x" ? "o" : "x")
     }
-    setPlayerTurn(playerTurn === "x" ? "o" : "x")
   }
 
   const handleReset = () => {
@@ -124,7 +131,7 @@ export function Game({ setIsPlaying }: GameProps) {
   const handleQuit = () => {
     setOpen(false) // close banner
     setIsPlaying(false) // return to GameMenu
-    setWinner(null)
+    // setWinner(null)
   }
 
   // Loop through the winConditions array
@@ -142,9 +149,6 @@ export function Game({ setIsPlaying }: GameProps) {
         squares[currentValue].value === squares[winConditions[i][0]].value)
       
       if (isWinner) {
-        // setWinner(winningPlayer)
-
-        // TODO: Update squares' isPartOfWin to true if part of win
         if (!winner) { // prevent useEffect from triggering
           let newSquares: Square[] = [...squares]
 
@@ -160,6 +164,23 @@ export function Game({ setIsPlaying }: GameProps) {
             // setSquares(newSquares)
           }
           setSquares(newSquares)
+
+          // update score
+          switch (winningPlayer) {
+            case "x":
+              setScore({...score, 
+                x: score.x + 1
+              })
+              break;
+            case "o":
+              setScore({...score, 
+                o: score.o + 1
+              })
+              break;
+            default:
+              console.log("error, something went wrong with updating the score on x or o win")
+              break;
+          }
         }
 
         setWinner(winningPlayer)
@@ -170,6 +191,9 @@ export function Game({ setIsPlaying }: GameProps) {
       // check for tie game
       if (squares.every(square => square.value)) {
         setOpen(true)
+        setScore({...score,
+          tie: score.tie + 1
+        })
         break
       }
     }
@@ -186,16 +210,12 @@ export function Game({ setIsPlaying }: GameProps) {
           <div className="self-center">
             <Logo />
           </div>
-          <span className="h-[52px] flex items-center justify-center gap-3 rounded-[10px] bg-semi-dark-navy shadow-[inset_0px_-4px_0px_0px_rgba(16,33,42,1.0)] text-center text-silver body heading-xs">
+          <span className="w-24 md:w-[140px] h-10 md:h-[52px] place-self-center flex items-center justify-center gap-2 md:gap-3 rounded-[10px] bg-semi-dark-navy text-center text-silver body heading-xs">
             {playerTurn === "x"
               ? (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M19.7231 3.30608L16.6939 0.276913C16.3247 -0.0923043 15.7261 -0.0923043 15.3569 0.276913L10 5.63378L4.64314 0.276913C4.27392 -0.0923043 3.6753 -0.0923043 3.30608 0.276913L0.276913 3.30608C-0.0923043 3.6753 -0.0923043 4.27392 0.276913 4.64314L5.63378 10L0.276913 15.3569C-0.0923043 15.7261 -0.0923043 16.3247 0.276913 16.6939L3.30608 19.7231C3.6753 20.0923 4.27392 20.0923 4.64314 19.7231L10 14.3662L15.3569 19.7231C15.7261 20.0923 16.3247 20.0923 16.6939 19.7231L19.7231 16.6939C20.0923 16.3247 20.0923 15.7261 19.7231 15.3569L14.3662 10L19.7231 4.64314C20.0923 4.27392 20.0923 3.6753 19.7231 3.30608Z" fill="#A8BFC9"/>
-                </svg>
+                <IconX className="w-4 h-4 md:w-5 md:h-5 fill-silver" />
               ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                  <path fillRule="evenodd" clipRule="evenodd" d="M20 10C20 4.47715 15.5228 0 10 0C4.47715 0 0 4.47715 0 10C0 15.5228 4.47715 20 10 20C15.5228 20 20 15.5228 20 10ZM5.92593 10C5.92593 7.74995 7.74995 5.92593 10 5.92593C12.25 5.92593 14.0741 7.74995 14.0741 10C14.0741 12.25 12.25 14.0741 10 14.0741C7.74995 14.0741 5.92593 12.25 5.92593 10Z" fill="#A8BFC9"/>
-                </svg>
+                <IconO className="w-4 h-4 md:w-5 md:h-5 fill-silver" />
               )
             }
             Turn
@@ -203,10 +223,10 @@ export function Game({ setIsPlaying }: GameProps) {
           <Button 
             color="silver" 
             variant="secondary" 
-            className="w-[52px] h-[52px] place-self-end"
+            className="w-10 md:w-[52px] h-10 md:h-[52px] place-self-end grid place-content-center"
             onClick={() => handleReset()}
           >
-            <IconRestart />
+            <IconRestart className="w-4 h-4 md:w-5 md:h-5 -mt-2" />
           </Button>
         </div>
         <div className="grid grid-cols-3 gap-5">
@@ -217,7 +237,7 @@ export function Game({ setIsPlaying }: GameProps) {
                 square.isPartOfWin && winner === "x" && "bg-light-blue shadow-[inset_0px_-8px_0px_0px_rgba(17,140,135,1.0)]",
                 square.isPartOfWin && winner === "o" && "bg-light-yellow shadow-[inset_0px_-8px_0px_0px_rgba(204,139,19,1.0)]",
                 !square.isPartOfWin && "bg-semi-dark-navy shadow-[inset_0px_-8px_0px_0px_rgba(16,33,42,1.0)]",
-                "group w-24 h-24 md:w-[140px] md:h-[140px] grid place-content-center rounded-[15px]"
+                "group w-24 h-24 md:w-[140px] md:h-[140px] grid place-content-center rounded-[15px] cursor-pointer"
               )}
               onClick={() => handleTurn(square)}
             >
@@ -252,15 +272,15 @@ export function Game({ setIsPlaying }: GameProps) {
         <div className="grid grid-cols-3 gap-x-5">
           <div className="h-16 md:h-[72px] flex flex-col items-center justify-center  rounded-[15px] bg-light-blue">
             <span className="text-dark-navy body uppercase -mb-2">X (You)</span>
-            <span className="text-dark-navy heading-md">14</span>
+            <span className="text-dark-navy heading-md">{score.x}</span>
           </div>
           <div className="h-16 md:h-[72px] flex flex-col items-center justify-center rounded-[15px] bg-silver">
             <span className="text-dark-navy body uppercase -mb-2">Ties</span>
-            <span className="text-dark-navy heading-md">32</span>
+            <span className="text-dark-navy heading-md">{score.tie}</span>
           </div>
           <div className="h-16 md:h-[72px] flex flex-col items-center justify-center rounded-[15px] bg-light-yellow">
             <span className="text-dark-navy body uppercase -mb-2">0 (CPU)</span>
-            <span className="text-dark-navy heading-md">11</span>
+            <span className="text-dark-navy heading-md">{score.o}</span>
           </div>
         </div>
       </div>
