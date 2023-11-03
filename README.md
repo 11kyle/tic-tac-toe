@@ -14,7 +14,7 @@
 
 ## Overview
 
-Tic-tac-toe game built for the web. Responsive layout for all screen sizes and devices. TypeScript used for game logic.
+Tic-tac-toe game built for the web. Responsive layout for all screen sizes and devices. TypeScript used for game logic and components.
 
 ### Screenshot
 
