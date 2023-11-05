@@ -295,7 +295,6 @@ export function Game() {
       {/* After game finish banner */}
       <Banner 
         open={open}
-        setOpen={setOpen}
         winner={winner}
         handleQuit={handleQuit}
         handleReset={handleReset}

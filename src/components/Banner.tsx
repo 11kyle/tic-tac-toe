@@ -10,13 +10,12 @@ import { usePlayerContext } from '@/context/PlayerContext'
 
 type BannerProps = {
   open: boolean
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>
   winner: "x" | "o" | null
   handleQuit: () => void
   handleReset: () => void
 }
 
-export default function Banner({ open, setOpen, winner, handleQuit, handleReset }: BannerProps) {
+export default function Banner({ open, winner, handleQuit, handleReset }: BannerProps) {
   const { player1 } = usePlayerContext()
   
   return (

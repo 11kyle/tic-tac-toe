@@ -7,7 +7,7 @@ export function GameMenu() {
   const { setInProgress } = useGameContext()
 
   return (
-    <div className="md:w-[460px] flex flex-col gap-10">
+    <div className="w-full max-w-[460px] flex flex-col gap-10">
       <div className="flex justify-center">
         <Logo />
       </div>
