@@ -124,8 +124,11 @@ export function Game() {
   const handleReset = () => {
     setOpen(false) // close banner
     setSquares(initialState) // clear game board
+    setTimeout(() => {
+      setWinner(null)
+    }, 300) // wait for animation to finish
     setPlayerTurn("x") // player x always goes first
-    setWinner(null)
+    // setWinner(null)
   }
 
   const handleQuit = () => {

@@ -24,10 +24,10 @@ export default function Banner({ open, setOpen, winner, handleQuit, handleReset 
       <Dialog as="div" className="relative z-10" onClose={() => {}}>
         <Transition.Child
           as={Fragment}
-          enter="ease-out duration-300"
+          enter="ease-out duration-1000 delay-300"
           enterFrom="opacity-0"
           enterTo="opacity-100"
-          leave="ease-in duration-200"
+          leave="ease-in duration-300"
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
@@ -38,12 +38,12 @@ export default function Banner({ open, setOpen, winner, handleQuit, handleReset 
           <div className="flex min-h-full items-center justify-center text-center sm:items-center">
             <Transition.Child
               as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-              enterTo="opacity-100 translate-y-0 sm:scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 translate-y-0 sm:scale-100"
-              leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              enter="ease-out duration-1000 delay-1000"
+              enterFrom="opacity-0 translate-y-4 sm:translate-y-0"
+              enterTo="opacity-100 translate-y-0"
+              leave="ease-in duration-300"
+              leaveFrom="opacity-100 translate-y-0"
+              leaveTo="opacity-0 translate-y-4 sm:translate-y-0"
             >
               <Dialog.Panel className="relative transform overflow-hidden bg-semi-dark-navy px-4 pb-10 pt-10 text-left shadow-xl transition-all sm:my-8 w-full md:py-12">
                 <div className="flex flex-col items-center justify-center">
