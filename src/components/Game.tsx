@@ -10,11 +10,7 @@ import { IconO } from "./icons/icon-o";
 import { IconX } from "./icons/icon-x";
 import Banner from "./Banner";
 import clsx from "clsx";
-
-type GameProps = {
-  setIsPlaying: React.Dispatch<React.SetStateAction<boolean>>
-  player1: "x" | "o"
-}
+import { useGameContext } from "@/context/GameContext";
 
 type Square = {
   id: number
@@ -99,12 +95,14 @@ const winConditions = [
   [2,4,6],
 ]
 
-export function Game({ setIsPlaying, player1 }: GameProps) {
+export function Game() {
   const [squares, setSquares] = useState<Square[]>(initialState)
   const [playerTurn, setPlayerTurn] = useState<"x" | "o">("x")
   const [winner, setWinner] = useState<"x" | "o" | null>(null)
   const [score, setScore] = useState(initialScore)
   const [open, setOpen] = useState<boolean>(false)
+
+  const { setInProgress } = useGameContext()
 
   const handleTurn = (activeSquare: Square) => {
     if (activeSquare.isMarked) { // do nothing is square is already marked
@@ -132,7 +130,7 @@ export function Game({ setIsPlaying, player1 }: GameProps) {
 
   const handleQuit = () => {
     setOpen(false) // close banner
-    setIsPlaying(false) // return to GameMenu
+    setInProgress(false) // return to GameMenu
     // setWinner(null)
   }
 
@@ -298,7 +296,6 @@ export function Game({ setIsPlaying, player1 }: GameProps) {
         winner={winner}
         handleQuit={handleQuit}
         handleReset={handleReset}
-        player1={player1}
       />
     </>
   )

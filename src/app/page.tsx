@@ -1,24 +1,17 @@
 "use client"
 
 import { Game } from '@/components/Game'
-import { NewGameMenu } from '@/components/NewGameMenu'
-import { useState } from 'react'
+import { GameMenu } from '@/components/GameMenu'
+import { useGameContext } from '@/context/GameContext'
 
 export default function Home() {
-  const [isPlaying, setIsPlaying] = useState<boolean>(false)
-  const [player1, setPlayer1] = useState<"x" | "o">("x")
+  const { inProgress } = useGameContext()
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-6">
-      {isPlaying
-        ? <Game 
-            setIsPlaying={setIsPlaying}
-            player1={player1}
-          />
-        : <NewGameMenu 
-            setIsPlaying={setIsPlaying}
-            setPlayer1={setPlayer1}
-          />
+      {inProgress
+        ? <Game />
+        : <GameMenu />
       }
     </main>
   )

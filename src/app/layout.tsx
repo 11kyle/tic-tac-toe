@@ -1,6 +1,8 @@
 import type { Metadata } from "next"
-import { Inter, Outfit } from "next/font/google"
+import { Outfit } from "next/font/google"
 import "./globals.css"
+import { GameContextProvider } from "@/context/GameContext"
+import { PlayerContextProvider } from "@/context/PlayerContext"
 
 // const inter = Inter({ subsets: ['latin'] })
 const outfit = Outfit({ subsets: ["latin"] })
@@ -17,7 +19,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={outfit.className}>{children}</body>
+      <body className={outfit.className}>
+        <GameContextProvider>
+          <PlayerContextProvider>
+            {children}
+          </PlayerContextProvider>
+        </GameContextProvider>
+      </body>
     </html>
   )
 }

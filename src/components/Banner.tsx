@@ -6,6 +6,7 @@ import { IconO } from './icons/icon-o'
 import { Button } from './Button'
 import { IconX } from './icons/icon-x'
 import clsx from 'clsx'
+import { usePlayerContext } from '@/context/PlayerContext'
 
 type BannerProps = {
   open: boolean
@@ -13,9 +14,11 @@ type BannerProps = {
   winner: "x" | "o" | null
   handleQuit: () => void
   handleReset: () => void
-  player1: "x" | "o"
 }
-export default function Banner({ open, setOpen, winner, handleQuit, handleReset, player1 }: BannerProps) {
+
+export default function Banner({ open, setOpen, winner, handleQuit, handleReset }: BannerProps) {
+  const { player1 } = usePlayerContext()
+  
   return (
     <Transition.Root show={open} as={Fragment}>
       <Dialog as="div" className="relative z-10" onClose={() => {}}>

@@ -3,6 +3,7 @@ import { RadioGroup } from '@headlessui/react'
 import { IconX } from './icons/icon-x'
 import { IconO } from './icons/icon-o'
 import clsx from 'clsx'
+import { usePlayerContext } from '@/context/PlayerContext'
 
 const players = [
   {
@@ -17,12 +18,10 @@ const players = [
   },
 ]
 
-type PlayerToggleProps = {
-  setPlayer1: React.Dispatch<React.SetStateAction<"x" | "o">>
-}
-
-export default function PlayerToggle({ setPlayer1 }: PlayerToggleProps) {
+export default function PlayerToggle() {
   const [selected, setSelected] = useState(players[0])
+
+  const { setPlayer1 } = usePlayerContext()
 
   useEffect(() => {
     if (selected.value === "x" || selected.value === "o") {

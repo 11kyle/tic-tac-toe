@@ -6,7 +6,7 @@ type ButtonProps = React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButton
 }
 
 const variantStyles = {
-  primary: 'w-full rounded-[15px] text-center heading-sm pt-[14px] pb-[25px]',
+  primary: 'w-full rounded-[15px] text-center heading-sm pt-[14px] pb-[25px] active:shadow-none active:pb-[18px] active:mt-[7px]',
   secondary: 'rounded-[10px] text-[16px] font-bold leading-normal tracking-[1px] px-[16px] pt-[15px] pb-[17px]'
 }
 
